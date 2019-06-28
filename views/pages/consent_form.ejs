@@ -351,7 +351,7 @@ For more information, see:
         if (checkbox) {
           var xhr = new XMLHttpRequest(),
             method = "POST",
-            url = "http://localhost:1337/share/borrower";
+            url = "http://localhost:1337/share/borrower-info";
 
           let params = JSON.stringify({ url, appNo });
           xhr.open(method, url, true);
@@ -359,6 +359,9 @@ For more information, see:
             if (xhr.readyState === 4 && xhr.status === 200) {
               console.log(xhr.responseText);
               document.getElementById('output').innerHTML = 'BMI = ' + xhr.responseText;
+            }
+            else if(xhr.readyState === 4 && xhr.status === 409){
+              console.log("Third party conflict");
             }
 
           };

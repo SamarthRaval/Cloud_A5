@@ -335,6 +335,7 @@ For more information, see:
   function login() {
     var password = document.getElementById("password").value;
     var employeeID = document.getElementById("employeeID").value;
+    var employeeId = parseInt(employeeID, 10);
     document.getElementById('PWDerror').innerHTML = '';
     document.getElementById('IDerror').innerHTML = '';
     if (employeeID != '') {
@@ -343,13 +344,27 @@ For more information, see:
           method = "POST",
           url = "http://localhost:1337/account/login";
 
-        let params = JSON.stringify({ password, employeeID });
+        let params = JSON.stringify({ employeeId, password });
         xhr.open(method, url, true);
+
         xhr.onreadystatechange = function () {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            console.log(xhr.responseText);
-            document.getElementById('output').innerHTML = 'BMI = ' + xhr.responseText;
+          try {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              console.log("response", xhr.responseText);
+              document.getElementById('output').innerHTML = 'BMI = ' + xhr.responseText;
+              window.location.replace("/consent_form");
+            }
+            else if (xhr.readyState === 4 && xhr.status === 401) {
+              console.log("Unauthorized User");
+            }
+            else if (xhr.readyState === 4 && xhr.status === 400) {
+              console.log("Bad Request");
+            }
           }
+          catch (err) {
+            console.log("Bad Request",err);
+          }
+
 
         };
         xhr.setRequestHeader('Content-Type', 'application/json')
